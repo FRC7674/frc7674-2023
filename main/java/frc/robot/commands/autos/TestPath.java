@@ -27,7 +27,7 @@ import frc.robot.Constants.DriveConstants;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TestPath extends SequentialCommandGroup {
+/*public class TestPath extends SequentialCommandGroup {
 
   public Command getAutoCommand(Trajectory trajectory) {
     var autoVoltageConstraint = 
@@ -45,7 +45,7 @@ public class TestPath extends SequentialCommandGroup {
           .setKinematics(DriveConstants.kDriveKinematics)
           .addConstraint(autoVoltageConstraint);
 
-        Trajectory testTrajectory =
+     /*    Trajectory testTrajectory =
           TrajectoryGenerator.generateTrajectory(
             new Pose2d(0,0, new Rotation2d(0)), 
             List.of(new Translation2d(1,1), new Translation2d(2, -1)), 
@@ -53,7 +53,7 @@ public class TestPath extends SequentialCommandGroup {
             config);
             
 
-          RamseteCommand ramseteCommand =
+       /*    RamseteCommand ramseteCommand =
             new RamseteCommand(
               trajectory, 
               Robot.drivetrain::getPose, 
@@ -74,11 +74,11 @@ public class TestPath extends SequentialCommandGroup {
   }
 
 
-  /** Creates a new TestPath. */
+  /** Creates a new TestPath. 
   public TestPath(Trajectory trajectory) {
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands( this.getAutoCommand(trajectory) );
   }
-}
+} */

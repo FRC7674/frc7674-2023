@@ -2,24 +2,27 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.drivetrain;
+package frc.robot.commands.Wrist;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-public class ResetOdometryAndHeading extends CommandBase {
-  /** Creates a new ResetOdometryAndHeading. */
-  public ResetOdometryAndHeading() {
+public class SetWristVoltage extends CommandBase {
+  public double voltage = 0.0;
+  /** Creates a new SetWristVoltage. 
+   * @param voltage
+   * */
+  public SetWristVoltage(double voltage) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Robot.drivetrain);
+    addRequirements(Robot.wrist);
+    this.voltage = voltage;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  //  Robot.drivetrain.zeroOdometry();
+    Robot.wrist.setWristVoltage(voltage);
 
   }
 
@@ -29,11 +32,14 @@ public class ResetOdometryAndHeading extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    Robot.wrist.setWristVoltage(0);
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
   }
-}
+} 

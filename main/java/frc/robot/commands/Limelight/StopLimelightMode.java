@@ -5,7 +5,7 @@
 package frc.robot.commands.Limelight;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.utils.DriveMode;
+import frc.robot.commands.Robot.setDriveMode;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -16,7 +16,7 @@ public class StopLimelightMode extends SequentialCommandGroup {
   public StopLimelightMode() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-  //*********************** */  addCommands(new setDriveMode(DriveMode.Limelight), new TurnLedOn());
+   //  addCommands(new setDriveMode(DriveMode.Limelight), new TurnLedOn());
   }
   }
 

@@ -8,19 +8,27 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.security.Key;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.commands.BobDrive;
-import frc.robot.commands.autos.TestPath;
+import frc.robot.subsystems.Arm;
+//import frc.robot.commands.autos.TestPath;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.Wrist;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -34,14 +42,16 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;;
 
   private Command m_teleopCommand = new BobDrive();
+  public static RobotContainer robotContainer = new RobotContainer();
+  public static Trajectory autoTrajectory = new Trajectory();
   public static Drivetrain drivetrain = new Drivetrain();
-  
-  public static OI oi;
+  public static Pneumatics pneumatics = new Pneumatics(); 
+  public static Limelight limelight = new Limelight();
+  public static Arm arm = new Arm();
+  public static Wrist wrist = new Wrist();
 
   private RobotContainer m_robotContainer;
-  public static Trajectory autoTrajectory = new Trajectory();
 
-  public static Limelight limelight;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -65,7 +75,7 @@ public class Robot extends TimedRobot {
       DriverStation.reportError("Unable to open Trajectory", ex.getStackTrace());
     } 
 
-    drivetrain.zeroOdometry();
+  //  drivetrain.zeroOdometry();
   }
 
 
@@ -97,7 +107,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Pigeon Pitch", drivetrain.pigeon.getPitch());
     SmartDashboard.putNumber("Pigeon Roll", drivetrain.pigeon.getRoll());
 
-    drivetrain.setFollowers();
+    SmartDashboard.putNumber("Slide Position", arm.getCurrentPosition());
+
+    SmartDashboard.putBoolean("Wrist Switch", wrist.getWristSwitchState());
+
+  //  drivetrain.setFollowers();
 
     CommandScheduler.getInstance().run();
   }
@@ -112,7 +126,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = new TestPath(autoTrajectory);
+  //  m_autonomousCommand = new TestPath(autoTrajectory);
     //drivetrain.zeroOdometry(); //remove
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -130,12 +144,13 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    drivetrain.zeroOdometry(); //remove later
+  //  drivetrain.zeroOdometry(); //remove later
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_teleopCommand.schedule();
+    m_teleopCommand.schedule();  
+
   }
 
   /** This function is called periodically during operator control. */

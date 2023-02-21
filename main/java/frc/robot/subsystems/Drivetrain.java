@@ -20,29 +20,38 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+  // conflicts with the rev robotics motor type \\
+//import edu.wpi.first.wpilibj.drive.RobotDriveBase.MotorType; 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 import frc.robot.commands.BobDrive;
 import frc.robot.utils.DriveSignal;
+ 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 
+ 
 public class Drivetrain extends SubsystemBase {
 
   // Motors
- // public TalonFX leftLead = new TalonFX(2);
- // public TalonFX leftFollow1 = new TalonFX(1);
+      // Left lead and follow motors
+  public CANSparkMax LeftDriveLead = new CANSparkMax(1, MotorType.kBrushless);
+  public CANSparkMax LeftDriveFollow1 = new CANSparkMax(2, MotorType.kBrushless);
+  public CANSparkMax LeftDriveFollow2 = new CANSparkMax(3, MotorType.kBrushless);
 
-  public CanSpark leftLead = new Spark(0);
-  public Spark leftfollow = new Spark(0);
-  
-
- // public TalonFX rightLead = new TalonFX(5);
- // public TalonFX rightFollow1 = new TalonFX(4);
-
-  public Spark rightLead = new Spark(0);
-  public Spark rightFollow = new Spark(0);
+  // Right lead and follow motors
+  public CANSparkMax RightDriveLead = new CANSparkMax(4, MotorType.kBrushless);
+  public CANSparkMax RightDriveFollow1 = new CANSparkMax(5, MotorType.kBrushless);
+  public CANSparkMax RightDriveFollow2 = new CANSparkMax(6, MotorType.kBrushless);
 
   public WPI_Pigeon2 pigeon = new WPI_Pigeon2(6);
   
@@ -52,16 +61,17 @@ public class Drivetrain extends SubsystemBase {
 
   private static final double rampRate = 0.25;
 
-  //DifferentialDrive differentialDrive = new DifferentialDrive(leftLead, rightLead);
+  DifferentialDrive differentialDrive = new DifferentialDrive(LeftDriveLead, RightDriveLead);
 
   /** Creates a new Drivetrain. */
-  public Drivetrain() {
+   public Drivetrain() {
 
-    setMotorConfigsToDefault();
+  
+//    setMotorConfigsToDefault();
     setMotorInversions();
     setMotorNeutralModes();
     setMotorRampRates();
-    
+  
 
     //TODO reset encoders
     odometry = new DifferentialDriveOdometry(getHeading(), getLeftLeadDriveDistanceMeters(), getRightLeadDriveDistanceMeters());
@@ -77,82 +87,88 @@ public class Drivetrain extends SubsystemBase {
 
   public void drive(ControlMode controlMode, double left, double right) {
     //Left control mode is set to left
-    this.leftLead.set(controlMode, left);
+    this.LeftDriveLead.set(left);
 
     //Right control mode is set to right
-    this.rightLead.set(controlMode, right);
+    this.RightDriveLead.set(right);
   }
   
   public void drive(ControlMode controlMode, DriveSignal driveSignal) {
     this.drive(controlMode, driveSignal.getLeft(), driveSignal.getRight());
   }
 
-  public void setFollowers() {
-    leftFollow.follow(leftLead);
-
-
-    rightFollow.follow(rightLead);
-
-  }
-
-  private void setMotorConfigsToDefault() {
-    
-    leftLead.configFactoryDefault();
-    leftFollow.configFactoryDefault();
-
-    
-    rightLead.configFactoryDefault();
-    rightFollow.configFactoryDefault();
- 
-  }
-
-  private void setMotorInversions() {
-    
-    leftLead.setInverted(false);
-    leftFollow.setInverted(false);
- 
-
-    rightLead.setInverted(true);
-    rightFollow.setInverted(true);
+   
+    // Sets followers to lead
+    public void setFollowers() {
+      LeftDriveFollow1.follow(LeftDriveLead);
+      LeftDriveFollow2.follow(LeftDriveLead);
   
-  }
+      RightDriveFollow1.follow(RightDriveLead);
+      RightDriveFollow2.follow(RightDriveLead);
+    }
+/* 
+  private void setMotorConfigsToDefault() {
+    LeftDriveLead.restoreFactoryDefaults();
+    LeftDriveFollow1.restoreFactoryDefaults();
+    LeftDriveFollow2.restoreFactoryDefaults();
+    
+    RightDriveLead.restoreFactoryDefaults();
+    RightDriveFollow1.restoreFactoryDefaults();
+  } 
+*/
+  private void setMotorInversions() {
 
+    LeftDriveLead.setInverted(false);
+    LeftDriveFollow1.setInverted(false);
+    LeftDriveFollow2.setInverted(false);
+ 
+
+    RightDriveLead.setInverted(true);
+    RightDriveFollow1.setInverted(true);
+    RightDriveFollow2.setInverted(true);
+  } 
+      /// SET TO BREAK MODE \\\
   private void setMotorNeutralModes() {
     
-    leftLead.setNeutralMode(NeutralMode.Coast);
-    leftFollow.setNeutralMode(NeutralMode.Coast);
- 
+    LeftDriveLead.setIdleMode(IdleMode.kCoast);
+    LeftDriveFollow1.setIdleMode(IdleMode.kCoast);
+    LeftDriveFollow2.setIdleMode(IdleMode.kCoast);
 
-    rightLead.setNeutralMode(NeutralMode.Coast);
-    rightFollow.setNeutralMode(NeutralMode.Coast);
+
+    RightDriveLead.setIdleMode(IdleMode.kCoast);
+    RightDriveFollow1.setIdleMode(IdleMode.kCoast);
+    RightDriveFollow2.setIdleMode(IdleMode.kCoast);
 
   }
 
   private void setMotorRampRates() {
 
-    leftLead.configOpenloopRamp(rampRate);
-    leftFollow.configOpenloopRamp(rampRate);
+    LeftDriveLead.setOpenLoopRampRate(rampRate);
+    LeftDriveFollow1.setOpenLoopRampRate(rampRate);
+    LeftDriveFollow2.setOpenLoopRampRate(rampRate);
 
 
-    rightLead.configOpenloopRamp(rampRate);
-    rightFollow.configOpenloopRamp(rampRate);
+    RightDriveLead.setOpenLoopRampRate(rampRate);
+    RightDriveFollow1.setOpenLoopRampRate(rampRate);
+    RightDriveFollow2.setOpenLoopRampRate(rampRate);
 
-  }
+  } 
+
 
   public double getLeftLeadDriveDistanceMeters() {
-    return this.leftLead.getSelectedSensorPosition() * Constants.DriveConstants.metersPerEncoderTick;
+    return this.LeftDriveLead.getEncoder().getPosition() * Constants.DriveConstants.metersPerEncoderTick;
   }
 
   public double getRightLeadDriveDistanceMeters() {
-    return this.rightLead.getSelectedSensorPosition() * Constants.DriveConstants.metersPerEncoderTick;
+    return this.RightDriveLead.getEncoder().getPosition() * Constants.DriveConstants.metersPerEncoderTick;
   }
 
   public double getLeftLeadDriveDistanceTicks() {
-    return this.leftLead.getSelectedSensorPosition();
+    return this.LeftDriveLead.getEncoder().getPosition();
   }
 
   public double getRightLeadDriveDistanceTicks() {
-    return this.rightLead.getSelectedSensorPosition();
+    return this.RightDriveLead.getEncoder().getPosition();
   }
 
   public Rotation2d getHeading() {
@@ -175,12 +191,12 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getLeftMotorSpeed() {
-    double leftmotorspeed = leftLead.getSelectedSensorVelocity() * Constants.DriveConstants.metersPerEncoderTick;
+    double leftmotorspeed = LeftDriveLead.getEncoder().getVelocity() * Constants.DriveConstants.metersPerEncoderTick;
     return leftmotorspeed;
   }
 
   public double getRightMotorSpeed() {
-    double rightmotorspeed = rightLead.getSelectedSensorVelocity() * Constants.DriveConstants.metersPerEncoderTick;
+    double rightmotorspeed = RightDriveLead.getEncoder().getVelocity() * Constants.DriveConstants.metersPerEncoderTick;
     return rightmotorspeed;
   }
 
@@ -188,33 +204,36 @@ public class Drivetrain extends SubsystemBase {
     	return new DifferentialDriveWheelSpeeds(getLeftMotorSpeed(), getRightMotorSpeed());
   }
 
-  public void zeroOdometry() {
+     public void zeroOdometry() {
     resetEncoders();
-    resetHeading();
-
-    Pose2d origin = new Pose2d(0,0,new Rotation2d(0));
-    odometry.resetPosition(getHeading(), getLeftLeadDriveDistanceMeters(), getRightLeadDriveDistanceMeters(), origin);
-  }
-
-  public void resetOdometry(Pose2d pose) {
-    odometry.resetPosition(getHeading(), getLeftLeadDriveDistanceMeters(), getRightLeadDriveDistanceMeters(), pose);
-  }
-
-  public void resetEncoders() {
+    resetHeading(); 
     
-    leftLead.setSelectedSensorPosition(0);
-    leftFollow.setSelectedSensorPosition(0);
+  }
+    Pose2d origin = new Pose2d(0,0,new Rotation2d(0));
+//   odometry.resetPosition(getHeading(), getLeftLeadDriveDistanceMeters(), getRightLeadDriveDistanceMeters(), origin);
+ // }
+
+   public void resetOdometry(Pose2d pose) {
+    odometry.resetPosition(getHeading(), getLeftLeadDriveDistanceMeters(), getRightLeadDriveDistanceMeters(), pose);
+  } 
+
+   public void resetEncoders() {
+    
+    LeftDriveLead.getEncoder().getPosition();
+    LeftDriveFollow1.getEncoder().getPosition();
+    LeftDriveFollow2.getEncoder().getPosition();
   
 
-    rightLead.setSelectedSensorPosition(0);
-    rightFollow.setSelectedSensorPosition(0);
+    RightDriveLead.getEncoder().getPosition();
+    RightDriveFollow1.getEncoder().getPosition();
+    RightDriveFollow2.getEncoder().getPosition();
   
   }
 
   public void tankDriveVolts(double leftVoltage, double rightVoltage) {
-    leftLead.set(TalonFXControlMode.PercentOutput, leftVoltage);
-    rightLead.set(TalonFXControlMode.PercentOutput, rightVoltage);
-  }
-
+    LeftDriveLead.set(leftVoltage);
+    RightDriveLead.set(rightVoltage);
+  } 
 }
+ 
 
