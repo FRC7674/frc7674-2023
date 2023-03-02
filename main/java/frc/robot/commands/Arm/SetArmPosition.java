@@ -7,11 +7,11 @@ package frc.robot.commands.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-public class SetArmSlidePosition extends CommandBase {
-
+public class SetArmPosition extends CommandBase {
+ 
   private double position = 0.0;
-  /** Creates a new SetArmSlidePosition. */
-  public SetArmSlidePosition(double position) {
+  /** Creates a new SetArmPosition. */
+  public SetArmPosition(double position) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Robot.arm);
     this.position = position;
@@ -20,9 +20,8 @@ public class SetArmSlidePosition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-     Robot.arm.armSlideGoToPosition(position);
-
+    
+      Robot.arm.armGoToPosition(position);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +30,8 @@ public class SetArmSlidePosition extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

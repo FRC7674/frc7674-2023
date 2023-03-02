@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 //import edu.wpi.first.wpilibj.drive.RobotDriveBase.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.Wrist.RotateWristWithJoystick;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
@@ -21,28 +22,34 @@ public class Wrist extends SubsystemBase {
 
 //Motor
 public CANSparkMax wristRotate = new CANSparkMax(11, MotorType.kBrushless);
-public CANSparkMax wristAngle = new CANSparkMax(10,MotorType.kBrushless);
+public CANSparkMax wristAngle = new CANSparkMax(10, MotorType.kBrushless);
 
 public DigitalInput magneticWristCenterSwitch = new DigitalInput(0);
 
-//PID
-/*
-    private SparkMaxPIDController pidController = wristRotate.getPIDController();
-    public RelativeEncoder wristEncoder = wristRotate.getEncoder();
-*/
-    
-      // dont know if this is needed or not \\
-public DigitalInput wristInput = new DigitalInput(10);
+public RelativeEncoder rotateEncoder = wristRotate.getEncoder();
+public SparkMaxPIDController rotatePidController = wristRotate.getPIDController();
+public RelativeEncoder angleEncoder = wristAngle.getEncoder();
+public SparkMaxPIDController anglePidController = wristAngle.getPIDController();
+
+  
 
 //Creates a new Wrist.
     public Wrist() {
+      rotatePidController.setFF(0.00008510);
+      rotatePidController.setP(0.065);
 
-      
+      anglePidController.setFF(0.00009091);
+      anglePidController.setP(0.15);
+    }
 
-  }
+    
     @Override
     public void periodic() {
     //This method will be called once per scheduler run
+    }
+
+    public void initDefaultCommand(){
+      setDefaultCommand(new RotateWristWithJoystick());
     }
 
     public static double getDigitalInput() {
@@ -67,4 +74,29 @@ public DigitalInput wristInput = new DigitalInput(10);
         return true;
       }
     }
+
+    public double getWristPosition(){
+      return angleEncoder.getPosition();
+    }
+
+    public double getWristRotatePosition(){
+      return rotateEncoder.getPosition();
+    }
+
+public void setRotatePosition(double Position){
+  rotatePidController.setReference(Position,CANSparkMax.ControlType.kPosition);
+}
+
+public double getWristRotateVelocity(){
+  return rotateEncoder.getVelocity();
+}
+
+public void setAnglePosition(double Position){
+  anglePidController.setReference(Position, CANSparkMax.ControlType.kPosition);
+}
+
+public double getWristAngleVelocity(){
+  return angleEncoder.getVelocity();
+}
+
 }

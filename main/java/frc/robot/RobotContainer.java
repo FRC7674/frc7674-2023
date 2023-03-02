@@ -5,18 +5,19 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.drivetrain.ResetOdometryAndHeading;
+import frc.robot.commands.DriverTest;
+import frc.robot.commands.Arm.SetArmPosition;
 import frc.robot.commands.Arm.SetArmVoltage;
 import frc.robot.commands.Arm.SetSlideVoltage;
+import frc.robot.commands.Arm.setArmEncoderPos;
+import frc.robot.commands.Arm.setArmSlideEncoderPos;
 import frc.robot.commands.Wrist.GripperToggle;
 import frc.robot.commands.Wrist.RotateToSwitch;
+import frc.robot.commands.Wrist.SetWristAnglePosition;
+import frc.robot.commands.Wrist.SetWristRotatePosition;
 import frc.robot.commands.Wrist.SetWristRotateVoltage;
 import frc.robot.commands.Wrist.SetWristVoltage;
-import frc.robot.commands.autos.Autos;
-//import frc.robot.commands.autos.TestPath;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -32,11 +33,12 @@ public class RobotContainer {
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-     private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    private final CommandXboxController m_driverController = 
+    new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-      //    private final CommandXboxController m_operatorController =
-  //    new CommandXboxController(OperatorConstants.kOperatorControllerPort);
+    private final CommandXboxController m_operatorController = 
+    new CommandXboxController(OperatorConstants.kOperatorControllerPort);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -60,27 +62,34 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-/* 
+ 
                          // WRIST ROTATE \\
-    m_driverController.x().whileTrue(new SetWristRotateVoltage(0.1));
-    m_driverController.b().whileTrue(new SetWristRotateVoltage(-0.1));
+    m_operatorController.x().whileTrue(new SetWristRotatePosition(0));
+    m_operatorController.b().whileTrue(new SetWristRotatePosition(500));
    
                          // WRIST MOVE \\
-    m_driverController.y().whileTrue(new SetWristVoltage(0.1));
-    m_driverController.a().whileTrue(new SetWristVoltage(-0.1));
+    m_operatorController.a().whileTrue(new SetWristAnglePosition(0)); 
+    m_operatorController.y().whileTrue(new SetWristAnglePosition(124));
 
-    m_driverController.rightBumper().whileTrue(new RotateToSwitch());
+    m_operatorController.rightBumper().whileTrue(new RotateToSwitch());
 
-    m_driverController.leftBumper().whileTrue(new GripperToggle());
+    m_operatorController.leftBumper().whileTrue(new GripperToggle());
 
                          // ARM MOVE \\
-    m_driverController.leftTrigger().whileTrue(new SetArmVoltage(0.1));
-    m_driverController.rightTrigger().whileTrue(new SetArmVoltage(-0.1));
+    //m_operatorController.leftTrigger().whileTrue(new SetArmVoltage(0.5)); //goes out
+    //m_operatorController.rightTrigger().whileTrue(new SetArmVoltage(-0.5)); //goes in
+
+   // m_operatorController.povLeft().whileTrue(new setArmEncoderPos());
+    m_operatorController.rightTrigger().whileTrue(new SetArmPosition(2500));
+    m_operatorController.leftTrigger().whileTrue(new SetArmPosition(71000)); //other
+
 
                          // ARM SLIDE \\
-    m_driverController.povUp().whileTrue(new SetSlideVoltage(0.1));
-    m_driverController.povDown().whileTrue(new SetSlideVoltage(-0.1));
-*/
+    m_operatorController.povLeft().whileTrue(new setArmSlideEncoderPos());
+
+    m_operatorController.povUp().whileTrue(new SetSlideVoltage(0.1));
+    m_operatorController.povDown().whileTrue(new SetSlideVoltage(-0.1));
+
 
   }
 
@@ -93,7 +102,7 @@ public class RobotContainer {
    // // An example command will be run in autonomous
    // return new Command();
   //}
-
+               // Driver \\
   public Pair<Double, Double> getLeftStick() {
     double leftX = m_driverController.getLeftX();
     double leftY = -1.0 * m_driverController.getLeftY();
@@ -106,4 +115,15 @@ public class RobotContainer {
     return new Pair<>(rightX, rightY);
   }
 
+  public Pair<Double, Double> getOperatorLeftStick() {
+    double leftX = m_operatorController.getLeftX();
+    double leftY = -1.0 * m_operatorController.getLeftY();
+    return new Pair<>(leftX, leftY);
+  }
+
+  public Pair<Double, Double> getOperatorRightStick() {
+    double rightX = m_operatorController.getRightX();
+    double rightY = -1.0 * m_operatorController.getRightY();
+    return new Pair<>(rightX, rightY);
+  }
 }

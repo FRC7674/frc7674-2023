@@ -53,8 +53,7 @@ public class Drivetrain extends SubsystemBase {
   public CANSparkMax RightDriveFollow1 = new CANSparkMax(5, MotorType.kBrushless);
   public CANSparkMax RightDriveFollow2 = new CANSparkMax(6, MotorType.kBrushless);
 
-  public WPI_Pigeon2 pigeon = new WPI_Pigeon2(6);
-  
+  public WPI_Pigeon2 pigeon = new WPI_Pigeon2(13);
   
   private DifferentialDriveOdometry odometry;
   Rotation2d heading; //= new Rotation2d(Units.degreesToRadians(pigeon.getFusedHeading()));
@@ -234,6 +233,14 @@ public class Drivetrain extends SubsystemBase {
     LeftDriveLead.set(leftVoltage);
     RightDriveLead.set(rightVoltage);
   } 
+
+public double getLeftDrivePosition(){
+  return LeftDriveLead.getEncoder().getPosition();
+}
+
+public double getRightDrivePosition(){
+  return RightDriveLead.getEncoder().getPosition();
+}
 }
  
 

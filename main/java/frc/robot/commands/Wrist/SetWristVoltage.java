@@ -4,7 +4,7 @@
 
 package frc.robot.commands.Wrist;
 
-import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+//import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
@@ -23,7 +23,6 @@ public class SetWristVoltage extends CommandBase {
   @Override
   public void initialize() {
     Robot.wrist.setWristVoltage(voltage);
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -51,36 +51,8 @@ public final class Constants {
       public static final DifferentialDriveKinematics kDriveKinematics =
         new DifferentialDriveKinematics(kTrackWithMeters);
 
-    }
-    ////// TODO Set PID (just copied from 319)
-    public static class ArmSlideConstants {
-      public static class PID {
-        public static final double kPUp = 0.9;
-        public static final double kIUp = 0;
-        public static final double kDUp = 0;
+    }     
 
-        public static final double kPDown = 0.9;
-        public static final double kIDown = 0;
-        public static final double kDDown = 0;
-
-        public static final int iZone = 0;
-        
-        public static final double fGainUp = 0.00019231;
-        public static final double fGainDown = 0;
-    }
-  }
-    ////// TODO Set PID (just copied from 319)
-    public static class WristConstants {
-      public static class PID {
-        public static final double kP = 0;
-        public static final double kI = 0;
-        public static final double kD = 0;
-
-        public static final int iZone = 0;
-        public static final double fGain = 0;
-      }
-  
-    }
     public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;

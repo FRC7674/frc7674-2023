@@ -23,6 +23,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.commands.BobDrive;
+import frc.robot.commands.Arm.MoveArmWithJoystick;
+import frc.robot.commands.Arm.SetArmPosition;
+import frc.robot.commands.Wrist.RotateWristWithJoystick;
 import frc.robot.subsystems.Arm;
 //import frc.robot.commands.autos.TestPath;
 import frc.robot.subsystems.Drivetrain;
@@ -39,16 +42,16 @@ import frc.robot.subsystems.Wrist;
 public class Robot extends TimedRobot {
 
   
-  private Command m_autonomousCommand;;
+  private Command m_autonomousCommand;
 
-  private Command m_teleopCommand = new BobDrive();
-  public static RobotContainer robotContainer = new RobotContainer();
   public static Trajectory autoTrajectory = new Trajectory();
   public static Drivetrain drivetrain = new Drivetrain();
   public static Pneumatics pneumatics = new Pneumatics(); 
   public static Limelight limelight = new Limelight();
   public static Arm arm = new Arm();
   public static Wrist wrist = new Wrist();
+
+  private Command m_teleopCommand = new BobDrive();
 
   private RobotContainer m_robotContainer;
 
@@ -92,7 +95,8 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    SmartDashboard.putNumber("Left Distance", drivetrain.getLeftLeadDriveDistanceMeters());
+  
+    /*SmartDashboard.putNumber("Left Distance", drivetrain.getLeftLeadDriveDistanceMeters());
     SmartDashboard.putNumber("Right Distance", drivetrain.getRightLeadDriveDistanceMeters());
     SmartDashboard.putNumber("Left Ticks", drivetrain.getLeftLeadDriveDistanceTicks());
     SmartDashboard.putNumber("Right Ticks", drivetrain.getRightLeadDriveDistanceTicks());
@@ -102,16 +106,31 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Fused Heading", drivetrain.getHeadingDegrees());
     SmartDashboard.putNumber("Left Wheel Speed", drivetrain.getLeftMotorSpeed());
     SmartDashboard.putNumber("Right Wheel Speed", drivetrain.getRightMotorSpeed());
-
+*/
     SmartDashboard.putNumber("Pigeon Yaw", drivetrain.pigeon.getYaw());
     SmartDashboard.putNumber("Pigeon Pitch", drivetrain.pigeon.getPitch());
     SmartDashboard.putNumber("Pigeon Roll", drivetrain.pigeon.getRoll());
 
-    SmartDashboard.putNumber("Slide Position", arm.getCurrentPosition());
-
     SmartDashboard.putBoolean("Wrist Switch", wrist.getWristSwitchState());
 
-  //  drivetrain.setFollowers();
+    SmartDashboard.putNumber("Arm Position", arm.getArmPosition());
+    SmartDashboard.putNumber("Arm Position 2", arm.getArmPosition());
+
+    SmartDashboard.putNumber("Slide Position", arm.getSlidePosition());
+    SmartDashboard.putNumber("Wrist Position", wrist.getWristPosition());
+    SmartDashboard.putNumber("Wrist Rotate Position", wrist.getWristRotatePosition());
+    SmartDashboard.putNumber("Left Drive Position", drivetrain.getLeftDrivePosition());
+    SmartDashboard.putNumber("Right Drive Position", drivetrain.getRightDrivePosition());
+
+    SmartDashboard.putNumber("Wrist Velocity", wrist.getWristRotateVelocity());
+    SmartDashboard.putNumber("Wrist Angle Velocity", wrist.getWristAngleVelocity());
+    
+    SmartDashboard.putNumber("Arm Velocity", arm.getArmVelocity());
+    SmartDashboard.putNumber("Arm Error", arm.armAngleLead.getClosedLoopError(0));
+
+
+    SmartDashboard.putNumber("Slide Velocity", arm.getArmSlideVelocity());
+
 
     CommandScheduler.getInstance().run();
   }
@@ -150,6 +169,9 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_teleopCommand.schedule();  
+
+    wrist.setDefaultCommand(new RotateWristWithJoystick());
+    //arm.setDefaultCommand(new MoveArmWithJoystick());
 
   }
 
