@@ -20,6 +20,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Wrist extends SubsystemBase {
 
+
+  
 //Motor
 public CANSparkMax wristRotate = new CANSparkMax(11, MotorType.kBrushless);
 public CANSparkMax wristAngle = new CANSparkMax(10, MotorType.kBrushless);
@@ -31,7 +33,11 @@ public SparkMaxPIDController rotatePidController = wristRotate.getPIDController(
 public RelativeEncoder angleEncoder = wristAngle.getEncoder();
 public SparkMaxPIDController anglePidController = wristAngle.getPIDController();
 
-  
+public double getWristRotateError;
+public double getWristAngleError;
+
+public double wristRotatePosition;
+public double wristAnglePosition;
 
 //Creates a new Wrist.
     public Wrist() {
@@ -41,7 +47,6 @@ public SparkMaxPIDController anglePidController = wristAngle.getPIDController();
       anglePidController.setFF(0.00009091);
       anglePidController.setP(0.15);
     }
-
     
     @Override
     public void periodic() {
@@ -75,13 +80,13 @@ public SparkMaxPIDController anglePidController = wristAngle.getPIDController();
       }
     }
 
-    public double getWristPosition(){
-      return angleEncoder.getPosition();
-    }
+public double getWristPosition(){
+  return angleEncoder.getPosition();
+}
 
-    public double getWristRotatePosition(){
-      return rotateEncoder.getPosition();
-    }
+public double getWristRotatePosition(){
+  return rotateEncoder.getPosition();
+}
 
 public void setRotatePosition(double Position){
   rotatePidController.setReference(Position,CANSparkMax.ControlType.kPosition);

@@ -84,7 +84,7 @@ public final class HelperFunctions {
 
         return max;
     }
-
+/*
     public static double signedSquare(double input) {
         if (input < 0) {
             return -(input * input);
@@ -92,7 +92,7 @@ public final class HelperFunctions {
             return input * input;
         }
     }
-
+*/
     public static double deadband(double signal, double deadband) {
         if(Math.abs(signal)>Math.abs(deadband)){
             return signal;

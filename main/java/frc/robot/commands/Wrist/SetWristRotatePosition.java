@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
 public class SetWristRotatePosition extends CommandBase {
+
   private double Position = 0.0;
   /** Creates a new SetWristRotatePosition. */
   public SetWristRotatePosition(double Position) {

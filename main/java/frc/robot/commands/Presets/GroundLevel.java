@@ -4,16 +4,40 @@
 
 package frc.robot.commands.Presets;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
+import frc.robot.subsystems.Arm;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class GroundLevel extends SequentialCommandGroup {
+public class GroundLevel extends CommandBase {
   /** Creates a new GroundLevel. */
-  public GroundLevel() {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands();
+
+  public void groundLevel() {
+    // Use addRequirements() here to declare subsystem dependencies.
+      addRequirements(Robot.arm);
+      addRequirements(Robot.wrist);
   }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
+ 
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+
+    Arm.armAnglePosition = 75000;
+    Arm.armSlidePosition = 2000;
+  
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+
 }

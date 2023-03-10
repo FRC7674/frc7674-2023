@@ -16,7 +16,7 @@ public class BobDrive extends CommandBase {
 
 	BobDriveHelper helper;
 	private double quickTurnThreshold = 0.2;
-	private double deadband = 0.15;
+	private double deadband = 0.1; // change
 
 	private RobotContainer robotContainer = new RobotContainer();
 	//private PIDController limelightRotatePID = new PIDController(0.25, 0.01, 0.0);

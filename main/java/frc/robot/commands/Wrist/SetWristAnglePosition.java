@@ -35,5 +35,6 @@ public class SetWristAnglePosition extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
+    // return (Math.abs(Robot.wrist.getWristAngleError) <= 1000);
   }
 }

@@ -30,6 +30,7 @@ import frc.robot.commands.BobDrive;
 import frc.robot.utils.DriveSignal;
  
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -105,6 +106,9 @@ public class Drivetrain extends SubsystemBase {
       RightDriveFollow1.follow(RightDriveLead);
       RightDriveFollow2.follow(RightDriveLead);
     }
+// public REVLibError follow​(CANSparkMax.ExternalFollower leader, int deviceID)
+//    public REVLibError follow(CANSparkMax.ExternalFollower LeftDriveLead, 1);
+
 /* 
   private void setMotorConfigsToDefault() {
     LeftDriveLead.restoreFactoryDefaults();

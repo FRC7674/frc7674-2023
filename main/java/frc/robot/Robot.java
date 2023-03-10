@@ -8,15 +8,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.security.Key;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,8 +35,6 @@ import frc.robot.subsystems.Wrist;
  * project.
  */
 public class Robot extends TimedRobot {
-
-  
   private Command m_autonomousCommand;
 
   public static Trajectory autoTrajectory = new Trajectory();
@@ -55,7 +48,6 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -66,22 +58,15 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-
     String trajectoryJSON = "PathWeaver//output//2metersforward.wpilib.json";
- 
     try {
       Path testPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
       autoTrajectory = TrajectoryUtil.fromPathweaverJson(testPath);
     }
-
     catch (IOException ex) {
       DriverStation.reportError("Unable to open Trajectory", ex.getStackTrace());
     } 
-
-  //  drivetrain.zeroOdometry();
   }
-
-
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
@@ -96,17 +81,16 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
   
-    /*SmartDashboard.putNumber("Left Distance", drivetrain.getLeftLeadDriveDistanceMeters());
+    /* SmartDashboard.putNumber("Left Distance", drivetrain.getLeftLeadDriveDistanceMeters());
     SmartDashboard.putNumber("Right Distance", drivetrain.getRightLeadDriveDistanceMeters());
     SmartDashboard.putNumber("Left Ticks", drivetrain.getLeftLeadDriveDistanceTicks());
     SmartDashboard.putNumber("Right Ticks", drivetrain.getRightLeadDriveDistanceTicks());
-
     SmartDashboard.putNumber("Pose X", drivetrain.getPose().getX());
     SmartDashboard.putNumber("Pose Y", drivetrain.getPose().getY());
     SmartDashboard.putNumber("Fused Heading", drivetrain.getHeadingDegrees());
     SmartDashboard.putNumber("Left Wheel Speed", drivetrain.getLeftMotorSpeed());
-    SmartDashboard.putNumber("Right Wheel Speed", drivetrain.getRightMotorSpeed());
-*/
+    SmartDashboard.putNumber("Right Wheel Speed", drivetrain.getRightMotorSpeed()); */
+
     SmartDashboard.putNumber("Pigeon Yaw", drivetrain.pigeon.getYaw());
     SmartDashboard.putNumber("Pigeon Pitch", drivetrain.pigeon.getPitch());
     SmartDashboard.putNumber("Pigeon Roll", drivetrain.pigeon.getRoll());
@@ -115,8 +99,8 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Arm Position", arm.getArmPosition());
     SmartDashboard.putNumber("Arm Position 2", arm.getArmPosition());
-
     SmartDashboard.putNumber("Slide Position", arm.getSlidePosition());
+    SmartDashboard.putNumber("Slide Position2", arm.getSlidePosition());
     SmartDashboard.putNumber("Wrist Position", wrist.getWristPosition());
     SmartDashboard.putNumber("Wrist Rotate Position", wrist.getWristRotatePosition());
     SmartDashboard.putNumber("Left Drive Position", drivetrain.getLeftDrivePosition());
@@ -124,13 +108,14 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Wrist Velocity", wrist.getWristRotateVelocity());
     SmartDashboard.putNumber("Wrist Angle Velocity", wrist.getWristAngleVelocity());
-    
     SmartDashboard.putNumber("Arm Velocity", arm.getArmVelocity());
-    SmartDashboard.putNumber("Arm Error", arm.armAngleLead.getClosedLoopError(0));
-
-
     SmartDashboard.putNumber("Slide Velocity", arm.getArmSlideVelocity());
+    SmartDashboard.putNumber("Slide Velocity2", arm.getArmSlideVelocity());
 
+    SmartDashboard.putNumber("Arm Error", arm.armAngleLead.getClosedLoopError(0));
+    SmartDashboard.putNumber("Slide Error", arm.armSlide.getClosedLoopError(0));
+
+   // SmartDashboard.putNumber("Slide Switch", arm.armSlide.getSensorCollection().isFwdLimitSwitchClosed());
 
     CommandScheduler.getInstance().run();
   }
@@ -163,15 +148,15 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-  //  drivetrain.zeroOdometry(); //remove later
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    
     m_teleopCommand.schedule();  
 
     wrist.setDefaultCommand(new RotateWristWithJoystick());
-    //arm.setDefaultCommand(new MoveArmWithJoystick());
+    arm.setDefaultCommand(new MoveArmWithJoystick());
 
   }
 

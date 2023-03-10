@@ -37,5 +37,6 @@ public class SetArmSlidePosition extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
+    //return (Math.abs(Robot.arm.armSlide.getClosedLoopError()) <= 1000);
   }
 }
