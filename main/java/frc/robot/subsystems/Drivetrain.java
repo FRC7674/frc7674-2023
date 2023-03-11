@@ -67,17 +67,15 @@ public class Drivetrain extends SubsystemBase {
    public Drivetrain() {
 
   
-//    setMotorConfigsToDefault();
+    setMotorConfigsToDefault(); 
     setMotorInversions();
     setMotorNeutralModes();
     setMotorRampRates();
-  
 
     //TODO reset encoders
     odometry = new DifferentialDriveOdometry(getHeading(), getLeftLeadDriveDistanceMeters(), getRightLeadDriveDistanceMeters());
 
   }
-
 
   @Override
   public void periodic() {
@@ -88,29 +86,21 @@ public class Drivetrain extends SubsystemBase {
   public void drive(ControlMode controlMode, double left, double right) {
     //Left control mode is set to left
     this.LeftDriveLead.set(left);
+    this.LeftDriveFollow1.set(left);
+    this.LeftDriveFollow2.set(left);
 
     //Right control mode is set to right
     this.RightDriveLead.set(right);
+    this.RightDriveFollow1.set(right);
+    this.RightDriveFollow2.set(right);
+
   }
   
   public void drive(ControlMode controlMode, DriveSignal driveSignal) {
     this.drive(controlMode, driveSignal.getLeft(), driveSignal.getRight());
   }
 
-   
-    // Sets followers to lead
-    public void setFollowers() {
-      LeftDriveFollow1.follow(LeftDriveLead);
-      LeftDriveFollow2.follow(LeftDriveLead);
-  
-      RightDriveFollow1.follow(RightDriveLead);
-      RightDriveFollow2.follow(RightDriveLead);
-    }
-// public REVLibError follow​(CANSparkMax.ExternalFollower leader, int deviceID)
-//    public REVLibError follow(CANSparkMax.ExternalFollower LeftDriveLead, 1);
-
-/* 
-  private void setMotorConfigsToDefault() {
+   private void setMotorConfigsToDefault() {
     LeftDriveLead.restoreFactoryDefaults();
     LeftDriveFollow1.restoreFactoryDefaults();
     LeftDriveFollow2.restoreFactoryDefaults();
@@ -118,7 +108,17 @@ public class Drivetrain extends SubsystemBase {
     RightDriveLead.restoreFactoryDefaults();
     RightDriveFollow1.restoreFactoryDefaults();
   } 
-*/
+
+    // Sets followers to lead
+    public void setFollowers() {
+      LeftDriveFollow1.follow(LeftDriveLead); 
+      LeftDriveFollow2.follow(LeftDriveLead);
+  
+      RightDriveFollow1.follow(RightDriveLead);
+      RightDriveFollow2.follow(RightDriveLead);
+    }
+
+
   private void setMotorInversions() {
 
     LeftDriveLead.setInverted(false);
@@ -133,14 +133,14 @@ public class Drivetrain extends SubsystemBase {
       /// SET TO BREAK MODE \\\
   private void setMotorNeutralModes() {
     
-    LeftDriveLead.setIdleMode(IdleMode.kCoast);
-    LeftDriveFollow1.setIdleMode(IdleMode.kCoast);
-    LeftDriveFollow2.setIdleMode(IdleMode.kCoast);
+    LeftDriveLead.setIdleMode(IdleMode.kBrake);
+    LeftDriveFollow1.setIdleMode(IdleMode.kBrake);
+    LeftDriveFollow2.setIdleMode(IdleMode.kBrake);
 
 
-    RightDriveLead.setIdleMode(IdleMode.kCoast);
-    RightDriveFollow1.setIdleMode(IdleMode.kCoast);
-    RightDriveFollow2.setIdleMode(IdleMode.kCoast);
+    RightDriveLead.setIdleMode(IdleMode.kBrake);
+    RightDriveFollow1.setIdleMode(IdleMode.kBrake);
+    RightDriveFollow2.setIdleMode(IdleMode.kBrake);
 
   }
 
