@@ -18,8 +18,11 @@ import frc.robot.commands.Wrist.SetWristAnglePosition;
 import frc.robot.commands.Wrist.SetWristRotatePosition;
 import frc.robot.commands.Wrist.SetWristRotateVoltage;
 import frc.robot.commands.Wrist.SetWristVoltage;
+import frc.robot.commands.drivetrain.DriveDistance;
 import frc.robot.subsystems.Wrist;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -31,8 +34,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  //add classes
-  GroundLevel groundLevel = new GroundLevel();
+//add thingies
+  Servo cameraServo = new Servo(0);
+
+
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -42,6 +47,13 @@ public class RobotContainer {
 
     public final CommandXboxController m_operatorController = 
     new CommandXboxController(OperatorConstants.kOperatorControllerPort);
+
+//camera
+
+public void CameraPosition() {
+  // Use addRequirements() here to declare subsystem dependencies.
+  cameraServo.set(.5);
+}
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -102,6 +114,13 @@ public class RobotContainer {
    
                              // Gripper \\ 
     m_operatorController.leftBumper().whileTrue(new GripperToggle());
+    
+                             // Auto Tests \\ 
+  //  m_driverController.a().onTrue(new DriveDistance(-95, 0.30));
+
+    if (m_driverController.a().getAsBoolean() == true) {
+      CameraPosition();
+    }
 
   }
 
@@ -117,33 +136,37 @@ public class RobotContainer {
                // Driver \\
   public Pair<Double, Double> getLeftStick() {
     double leftX = m_driverController.getLeftX();
-    if (leftX < 0) {
+  // removed due to squaring twice
+    /*  if (leftX < 0) {
       leftX = -(leftX * leftX);
   } else {
       leftX = leftX * leftX;
-  }
+  } */
     double leftY = -1.0 * m_driverController.getLeftY();
-    if (leftY < 0) {
+      // removed due to squaring twice
+  /*   if (leftY < 0) {
       leftY = -(leftY * leftY);
   } else {
-      leftY = leftY * leftY;
-  }
-    return new Pair<>(leftX, leftY);
+      leftY = leftY * leftY; 
+  } */
+    return new Pair<>(leftX, leftY); 
   }
 
   public Pair<Double, Double> getRightStick() {
     double rightX = m_driverController.getRightX();
-    if (rightX < 0) {
+      // removed due to squaring twice
+  /*   if (rightX < 0) {
       rightX = -(rightX * rightX);
   } else {
       rightX = rightX * rightX;
-  }
+  } */
     double rightY = -1.0 * m_driverController.getRightY();
-    if (rightY < 0) {
+      // removed due to squaring twice
+   /*  if (rightY < 0) {
       rightY = -(rightY * rightY);
   } else {
       rightY = rightY * rightY;
-  }
+  } */
     return new Pair<>(rightX, rightY);
   }
   

@@ -55,6 +55,13 @@ public class Drivetrain extends SubsystemBase {
   public CANSparkMax RightDriveFollow2 = new CANSparkMax(6, MotorType.kBrushless);
 
   public WPI_Pigeon2 pigeon = new WPI_Pigeon2(13);
+
+// Drive Distance for encoders
+  public RelativeEncoder leftDriveEncoder = LeftDriveLead.getEncoder();
+  public SparkMaxPIDController leftDrivePidController = LeftDriveLead.getPIDController();
+  // Drive Distance for enconders
+  public RelativeEncoder rightDriveEncoder = RightDriveLead.getEncoder();
+  public SparkMaxPIDController rightDrivePidController = RightDriveLead.getPIDController();
   
   private DifferentialDriveOdometry odometry;
   Rotation2d heading; //= new Rotation2d(Units.degreesToRadians(pigeon.getFusedHeading()));
@@ -62,19 +69,24 @@ public class Drivetrain extends SubsystemBase {
   private static final double rampRate = 0.25;
 
   DifferentialDrive differentialDrive = new DifferentialDrive(LeftDriveLead, RightDriveLead);
+  
 
   /** Creates a new Drivetrain. */
    public Drivetrain() {
 
-  
-    setMotorConfigsToDefault(); 
+    //setMotorConfigsToDefault();
     setMotorInversions();
     setMotorNeutralModes();
     setMotorRampRates();
 
     //TODO reset encoders
     odometry = new DifferentialDriveOdometry(getHeading(), getLeftLeadDriveDistanceMeters(), getRightLeadDriveDistanceMeters());
-
+    
+    /* 
+    // trying to fix the error we get in driverstation
+    differentialDrive.setExpiration(.30);
+    differentialDrive.feed();
+    */
   }
 
   @Override
@@ -93,21 +105,22 @@ public class Drivetrain extends SubsystemBase {
     this.RightDriveLead.set(right);
     this.RightDriveFollow1.set(right);
     this.RightDriveFollow2.set(right);
-
   }
   
   public void drive(ControlMode controlMode, DriveSignal driveSignal) {
     this.drive(controlMode, driveSignal.getLeft(), driveSignal.getRight());
   }
 
-   private void setMotorConfigsToDefault() {
+//SET MOTORS TO DEFAULT SETTINGS, RUNS ONCE, FIRST STEP
+  private void setMotorConfigsToDefault() {
     LeftDriveLead.restoreFactoryDefaults();
     LeftDriveFollow1.restoreFactoryDefaults();
     LeftDriveFollow2.restoreFactoryDefaults();
     
     RightDriveLead.restoreFactoryDefaults();
     RightDriveFollow1.restoreFactoryDefaults();
-  } 
+    RightDriveFollow2.restoreFactoryDefaults();
+  }
 
     // Sets followers to lead
     public void setFollowers() {
@@ -119,8 +132,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
 
+//SETS INVERSIONS SO MOTORS SPIN THE RIGHT WAY, RUNS ONCE, SECOND STEP
   private void setMotorInversions() {
-
     LeftDriveLead.setInverted(false);
     LeftDriveFollow1.setInverted(false);
     LeftDriveFollow2.setInverted(false);
@@ -129,21 +142,21 @@ public class Drivetrain extends SubsystemBase {
     RightDriveLead.setInverted(true);
     RightDriveFollow1.setInverted(true);
     RightDriveFollow2.setInverted(true);
-  } 
-      /// SET TO BREAK MODE \\\
-  private void setMotorNeutralModes() {
-    
-    LeftDriveLead.setIdleMode(IdleMode.kBrake);
-    LeftDriveFollow1.setIdleMode(IdleMode.kBrake);
-    LeftDriveFollow2.setIdleMode(IdleMode.kBrake);
-
-
-    RightDriveLead.setIdleMode(IdleMode.kBrake);
-    RightDriveFollow1.setIdleMode(IdleMode.kBrake);
-    RightDriveFollow2.setIdleMode(IdleMode.kBrake);
-
   }
 
+//SETS TO BRAKE MODE, RUNS ONCE, THIRD STEP
+  public void setMotorNeutralModes() {
+    
+    LeftDriveLead.setIdleMode(IdleMode.kBrake);
+    //LeftDriveFollow1.setIdleMode(IdleMode.kBrake);
+    //LeftDriveFollow2.setIdleMode(IdleMode.kBrake);
+
+    RightDriveLead.setIdleMode(IdleMode.kBrake);
+    //RightDriveFollow1.setIdleMode(IdleMode.kBrake);
+    //RightDriveFollow2.setIdleMode(IdleMode.kBrake);
+  }
+
+//SETS SPEED? RUNS ONCE, FOURTH STEP
   private void setMotorRampRates() {
 
     LeftDriveLead.setOpenLoopRampRate(rampRate);
@@ -154,8 +167,7 @@ public class Drivetrain extends SubsystemBase {
     RightDriveLead.setOpenLoopRampRate(rampRate);
     RightDriveFollow1.setOpenLoopRampRate(rampRate);
     RightDriveFollow2.setOpenLoopRampRate(rampRate);
-
-  } 
+  }
 
 
   public double getLeftLeadDriveDistanceMeters() {
@@ -238,13 +250,29 @@ public class Drivetrain extends SubsystemBase {
     RightDriveLead.set(rightVoltage);
   } 
 
-public double getLeftDrivePosition(){
-  return LeftDriveLead.getEncoder().getPosition();
-}
+  public double getLeftDrivePosition(){
+    return LeftDriveLead.getEncoder().getPosition();
+  }
 
-public double getRightDrivePosition(){
-  return RightDriveLead.getEncoder().getPosition();
-}
+  public double getRightDrivePosition(){
+    return RightDriveLead.getEncoder().getPosition();
+  }
+
+// Drive Distance
+  public void setLeftDrivePosition(double Position) {
+    leftDrivePidController.setReference(Position, CANSparkMax.ControlType.kPosition);
+  }
+
+// Drive Distance
+  public void setRightDrivePosition(double Position) {
+    rightDrivePidController.setReference(Position, CANSparkMax.ControlType.kPosition);
+  }
+
+// Drive Distance
+  public void setDrivetrainPositionToZero() {
+    setLeftDrivePosition(0);
+    setRightDrivePosition(0);
+  }
 }
  
 

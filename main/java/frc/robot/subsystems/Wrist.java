@@ -20,8 +20,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Wrist extends SubsystemBase {
 
-
-  
 //Motor
 public CANSparkMax wristRotate = new CANSparkMax(11, MotorType.kBrushless);
 public CANSparkMax wristAngle = new CANSparkMax(10, MotorType.kBrushless);
@@ -41,6 +39,9 @@ public double wristAnglePosition;
 
 //Creates a new Wrist.
     public Wrist() {
+
+     // wristRotate.setInverted(true); // to make left joystick left spin
+
       rotatePidController.setFF(0.00008510);
       rotatePidController.setP(0.065);
 
@@ -70,12 +71,10 @@ public double wristAnglePosition;
     }
 
     public boolean getWristSwitchState(){
-      if (magneticWristCenterSwitch.get() == true) 
-      {
+      if (magneticWristCenterSwitch.get() == true) {
         return false;
       } 
-      else 
-      {
+      else {
         return true;
       }
     }

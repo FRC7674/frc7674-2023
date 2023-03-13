@@ -12,6 +12,7 @@ import frc.robot.Robot;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class GripperToggle extends InstantCommand {
+  boolean gripperOn;
   public GripperToggle() {
     // Use addRequirements() here to declare subsystem dependencies.
       addRequirements(Robot.pneumatics);

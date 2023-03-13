@@ -8,10 +8,18 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.security.Key;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -47,6 +55,12 @@ public class Robot extends TimedRobot {
   private Command m_teleopCommand = new BobDrive();
 
   private RobotContainer m_robotContainer;
+/* 
+  UsbCamera camera1;
+  UsbCamera camera2;
+  VideoSink server;
+  NetworkTableEntry cameraSelection;
+*/
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -56,6 +70,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    
+    // Cameras
+    CameraServer.startAutomaticCapture(0);
+    //camera2 = CameraServer.startAutomaticCapture(1);
+
     m_robotContainer = new RobotContainer();
 
     String trajectoryJSON = "PathWeaver//output//2metersforward.wpilib.json";
@@ -80,16 +99,6 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-  
-    /* SmartDashboard.putNumber("Left Distance", drivetrain.getLeftLeadDriveDistanceMeters());
-    SmartDashboard.putNumber("Right Distance", drivetrain.getRightLeadDriveDistanceMeters());
-    SmartDashboard.putNumber("Left Ticks", drivetrain.getLeftLeadDriveDistanceTicks());
-    SmartDashboard.putNumber("Right Ticks", drivetrain.getRightLeadDriveDistanceTicks());
-    SmartDashboard.putNumber("Pose X", drivetrain.getPose().getX());
-    SmartDashboard.putNumber("Pose Y", drivetrain.getPose().getY());
-    SmartDashboard.putNumber("Fused Heading", drivetrain.getHeadingDegrees());
-    SmartDashboard.putNumber("Left Wheel Speed", drivetrain.getLeftMotorSpeed());
-    SmartDashboard.putNumber("Right Wheel Speed", drivetrain.getRightMotorSpeed()); */
 
     SmartDashboard.putNumber("Pigeon Yaw", drivetrain.pigeon.getYaw());
     SmartDashboard.putNumber("Pigeon Pitch", drivetrain.pigeon.getPitch());
@@ -114,8 +123,6 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Arm Error", arm.armAngleLead.getClosedLoopError(0));
     SmartDashboard.putNumber("Slide Error", arm.armSlide.getClosedLoopError(0));
-
-   // SmartDashboard.putNumber("Slide Switch", arm.armSlide.getSensorCollection().isFwdLimitSwitchClosed());
 
     CommandScheduler.getInstance().run();
   }

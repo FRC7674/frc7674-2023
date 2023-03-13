@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +26,9 @@ public class Arm extends SubsystemBase {
   public static double armSlidePosition;
 
   public static double currentArmAnglePosition;
+
+  //int armSlideRevLimitSwitchTripped = Robot.arm.armSlide.getSensorCollection().isRevLimitSwitchClosed();
+  //int armAngleRevLimitSwitchTripped = Robot.arm.armAngleLead.getSensorCollection().isRevLimitSwitchClosed();
 
   /** Creates a new Arm. */
   public Arm() {
@@ -92,10 +94,18 @@ public class Arm extends SubsystemBase {
     armAngleLead.setSelectedSensorPosition(0);
     armAngleFollow.setSelectedSensorPosition(0);
   }
+
       // encoders \\
   public void setArmEncoders(double Position){
     armAngleLead.setSelectedSensorPosition(Position);
     armAngleFollow.setSelectedSensorPosition(Position);
+    /*
+    //zero encoders with limit switches
+    if (armAngleRevLimitSwitchTripped == 1) {
+      armAngleLead.configClearPositionOnLimitR(true, 30);
+      armAngleFollow.configClearPositionOnLimitR(true, 30);
+    }
+    */
   }
 
   public double getArmVelocity(){
@@ -124,6 +134,12 @@ public class Arm extends SubsystemBase {
       // encoders \\
   public void setSlideEncoders(double Position){
     armSlide.setSelectedSensorPosition(Position);
+    /*
+    //zero encoders with limit switches
+    if (armSlideRevLimitSwitchTripped == 1) {
+      armSlide.configClearPositionOnLimitR(true, 30);
+    }
+    */
   } 
   
   public double getArmSlideVelocity(){

@@ -14,7 +14,6 @@ public class Pneumatics extends SubsystemBase {
 
 
   public Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
-  public boolean iseEnabled;
   public boolean getPressureSwitchValue = compressor.getPressureSwitchValue();
   private double current = compressor.getCurrent();
 
@@ -30,8 +29,8 @@ public class Pneumatics extends SubsystemBase {
     current = compressor.getCurrent();
 
 
-    gripperSolenoid1.set(Value.kForward);
-    gripperSolenoid2.set(Value.kForward);
+    gripperSolenoid1.set(Value.kReverse);
+    gripperSolenoid2.set(Value.kReverse);
   
 
   }

@@ -48,10 +48,16 @@ public class MoveArmWithJoystick extends CommandBase {
       Arm.armSlidePosition = 0;
       Robot.arm.armSlideGoToPosition(Arm.armSlidePosition);
     }
+/* 
+           // not needed?? / added 3/12
+     // precision mode: if right bumper is pressed then values divided by number
+     if (robotContainer.m_operatorController.rightBumper().getAsBoolean() == true) {
+      armSlideValue = armSlideValue / 2;
+    } */
 
                             // Arm Move \\
     double armMoveValue = robotContainer.getOperatorLeftStick().getSecond(); //up is up down is down
-    double safeArmMoveValue = HelperFunctions.deadband(armMoveValue, 0.1)* -1; // was 0.5 // changed deadband
+    double safeArmMoveValue = HelperFunctions.deadband(armMoveValue, 0.1)* -1; // was 0.5 
     Arm.armAnglePosition = Arm.armAnglePosition + safeArmMoveValue * 400; //updating armAnglePosition with speed+joystick control
     Robot.arm.armGoToPosition(Arm.armAnglePosition);
 
@@ -65,17 +71,13 @@ public class MoveArmWithJoystick extends CommandBase {
       Arm.armAnglePosition = 0;
       Robot.arm.armGoToPosition(Arm.armAnglePosition);
     }
-/* 
-    int slideLimitSwitchTripped = Robot.arm.armSlide.getSensorCollection().isFwdLimitSwitchClosed(); // for limit switch not done
-    if( slideLimitSwitchTripped == 1 ) {
-       
-      if (Arm.armSlidePosition < 0) {
-
-      }
-    
+ 
+           // confusion / added 3/12
+    // precision mode: if right bumper is pressed then values divided by number
+    if (robotContainer.m_operatorController.rightBumper().getAsBoolean() == true) {
+      armMoveValue = armMoveValue / 2;
     }
-*/
-   
+
   }
 
   // Called once the command ends or is interrupted.

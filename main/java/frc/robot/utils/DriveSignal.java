@@ -1,6 +1,6 @@
 package frc.robot.utils;
 
-/**
+/*
  * A drivetrain command consisting of the left, right motor settings and whether
  * the brake mode is enabled.
  */
