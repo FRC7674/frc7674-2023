@@ -72,11 +72,11 @@ public class MoveArmWithJoystick extends CommandBase {
       Robot.arm.armGoToPosition(Arm.armAnglePosition);
     }
  
-           // confusion / added 3/12
+    /*        // confusion / added 3/12
     // precision mode: if right bumper is pressed then values divided by number
     if (robotContainer.m_operatorController.rightBumper().getAsBoolean() == true) {
       armMoveValue = armMoveValue / 2;
-    }
+    } */
 
   }
 

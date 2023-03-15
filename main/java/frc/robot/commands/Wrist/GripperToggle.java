@@ -25,4 +25,6 @@ public class GripperToggle extends InstantCommand {
     Robot.pneumatics.toggleGripper2Solenoid();
 
   }
+
+  
 }

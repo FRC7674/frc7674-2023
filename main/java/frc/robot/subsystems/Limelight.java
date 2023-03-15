@@ -4,9 +4,12 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
+  public Servo cameraServo = new Servo(1);
+
   /** Creates a new Limelight. */
   public Limelight() {}
 
@@ -19,5 +22,9 @@ public void setLedModeOff() {
 }
 
 public void setLedModeOn() {
+}
+
+public void setServo(double position) {
+  cameraServo.set(position);
 }
 }

@@ -99,5 +99,4 @@ public final class HelperFunctions {
         }
         return 0.0;
     }
-
 }

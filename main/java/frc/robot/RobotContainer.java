@@ -11,6 +11,7 @@ import frc.robot.commands.Arm.SetArmVoltage;
 import frc.robot.commands.Arm.SetSlideVoltage;
 import frc.robot.commands.Arm.setArmEncoderPos;
 import frc.robot.commands.Arm.setArmSlideEncoderPos;
+import frc.robot.commands.Limelight.CameraControl;
 import frc.robot.commands.Presets.GroundLevel;
 import frc.robot.commands.Wrist.GripperToggle;
 import frc.robot.commands.Wrist.RotateToSwitch;
@@ -21,7 +22,6 @@ import frc.robot.commands.Wrist.SetWristVoltage;
 import frc.robot.commands.drivetrain.DriveDistance;
 import frc.robot.subsystems.Wrist;
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -34,8 +34,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-//add thingies
-  Servo cameraServo = new Servo(0);
 
 
   // The robot's subsystems and commands are defined here...
@@ -47,13 +45,6 @@ public class RobotContainer {
 
     public final CommandXboxController m_operatorController = 
     new CommandXboxController(OperatorConstants.kOperatorControllerPort);
-
-//camera
-
-public void CameraPosition() {
-  // Use addRequirements() here to declare subsystem dependencies.
-  cameraServo.set(.5);
-}
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -115,12 +106,16 @@ public void CameraPosition() {
                              // Gripper \\ 
     m_operatorController.leftBumper().whileTrue(new GripperToggle());
     
-                             // Auto Tests \\ 
-  //  m_driverController.a().onTrue(new DriveDistance(-95, 0.30));
+                             // Camera \\
+    m_driverController.y().onTrue(new CameraControl(0.95));
+    m_driverController.x().onTrue(new CameraControl(0.85));
+    m_driverController.b().onTrue(new CameraControl(0.73));
+    m_driverController.a().onTrue(new CameraControl(0.59));
 
-    if (m_driverController.a().getAsBoolean() == true) {
-      CameraPosition();
-    }
+
+    //m_driverController.leftTrigger().whileTrue(new SetArmSlidePosition(50000));
+   // m_driverController.rightTrigger().whileTrue(new SetArmPosition(50000));
+   // m_driverController.leftBumper().whileTrue(new SetWristAnglePosition(50));
 
   }
 
