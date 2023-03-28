@@ -13,16 +13,15 @@ import frc.robot.Robot;
 
 public class DriveDistance extends CommandBase {
 
-int distance = 0;
+double distance = 0.0;
 double percentOutput = 0;
 Boolean leftFinished = false;
 Boolean rightFinished = false;
 
   /** Creates a new DriveDistance. */
-  public DriveDistance(int distance_ , double percentOutput_ ) {
+  public DriveDistance(double distance_ , double percentOutput_ ) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Robot.drivetrain);
-
     distance = distance_;
     percentOutput = percentOutput_;
   }
@@ -30,24 +29,20 @@ Boolean rightFinished = false;
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
     Robot.drivetrain.setDrivetrainPositionToZero();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     Robot.drivetrain.drive(ControlMode.PercentOutput, percentOutput, percentOutput);
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     Robot.drivetrain.drive(ControlMode.PercentOutput, 0, 0);
-    Robot.drivetrain.setMotorNeutralModes(); //no input needed, function sets them all to brake
+    Robot.drivetrain.setMotorNeutralModes(IdleMode.kBrake); //no input needed, function sets them all to brake
   }
 
   // Returns true when the command should end.

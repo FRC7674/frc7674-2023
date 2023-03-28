@@ -12,7 +12,6 @@ public class RotateToSwitch extends CommandBase {
   public RotateToSwitch() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Robot.wrist);
-
   }
 
   // Called when the command is initially scheduled.

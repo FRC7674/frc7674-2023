@@ -23,7 +23,6 @@ public class GripperToggle extends InstantCommand {
   public void initialize() {
     Robot.pneumatics.toggleGripper1Solenoid();
     Robot.pneumatics.toggleGripper2Solenoid();
-
   }
 
   

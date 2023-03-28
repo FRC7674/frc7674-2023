@@ -2,25 +2,26 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Limelight;
+package frc.robot.commands.drivetrain;
+
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-public class CameraControl extends CommandBase {
-
-  double d = 0.0;
-  /** Creates a new CameraControl.*/
-  public CameraControl(double d) {
+public class SetNeutralMode extends CommandBase {
+  IdleMode mode;
+  /** Creates a new SetNeutralMode. */
+  public SetNeutralMode(IdleMode Mode) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.d = d;
-    addRequirements(Robot.limelight);
+    addRequirements(Robot.drivetrain);
+    this.mode = Mode;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Robot.limelight.setServo(d);
+    Robot.drivetrain.setMotorNeutralModes(mode);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

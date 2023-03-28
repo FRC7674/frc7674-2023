@@ -26,7 +26,6 @@ public class RotateWristWithJoystick extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
     wristRotatePosition = Robot.wrist.getWristRotatePosition();
     wristAnglePosition = Robot.wrist.getWristPosition();
   }
@@ -55,12 +54,6 @@ public class RotateWristWithJoystick extends CommandBase {
       Robot.wrist.setRotatePosition(wristRotatePosition);
     }
 
-       /*   // confusion and needed??? not sure if will work for button / added 3/12
-     // precision mode: if right bumper is pressed then values divided by number
-     if (robotContainer.m_operatorController.rightBumper().getAsBoolean() == true) {
-      moveValue = moveValue / 2;
-    } */
-
                     // Wrist Angle \\
     double pivotValue = robotContainer.getOperatorRightStick().getSecond(); //get y axis (no deadband)
     double safePivotValue = HelperFunctions.deadband(pivotValue, 0.1)* 0.5; //adding in deadband (use this) 
@@ -80,12 +73,6 @@ public class RotateWristWithJoystick extends CommandBase {
       wristAnglePosition = 0;
       Robot.wrist.setAnglePosition(wristAnglePosition);
     }
-
-        /*  // confusion is needed? / added 3/12
-     // precision mode: if right bumper is pressed then values divided by number
-     if (robotContainer.m_operatorController.rightBumper().getAsBoolean() == true) {
-      pivotValue = pivotValue / 2;
-    } */
 
   }
 

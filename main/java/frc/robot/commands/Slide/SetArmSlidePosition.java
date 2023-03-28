@@ -2,30 +2,31 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Limelight;
+package frc.robot.commands.Slide;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
+import frc.robot.utils.HelperFunctions;
 
-public class CameraControl extends CommandBase {
+public class SetArmSlidePosition extends CommandBase {
 
-  double d = 0.0;
-  /** Creates a new CameraControl.*/
-  public CameraControl(double d) {
+  private double Position = 0.0;
+  /** Creates a new SetArmSlidePosition. */
+  public SetArmSlidePosition(double Position) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.d = d;
-    addRequirements(Robot.limelight);
+    addRequirements(Robot.slide);
+    this.Position = Position;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    Robot.limelight.setServo(d);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    Robot.slide.armSlideGoToPosition(Position);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -34,6 +35,6 @@ public class CameraControl extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return HelperFunctions.deadband(Robot.slide.getSlidePosition() - Position, 800) == 0;
   }
 }

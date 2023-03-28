@@ -18,25 +18,18 @@ import frc.robot.commands.Arm.MoveArmWithJoystick;
 
 public class Arm extends SubsystemBase {
   
-  public TalonFX armSlide = new TalonFX(7);
+  
   public TalonFX armAngleLead = new TalonFX(8);
   public TalonFX armAngleFollow = new TalonFX(9);
 
   public static double armAnglePosition;
-  public static double armSlidePosition;
-
   public static double currentArmAnglePosition;
-
-  //int armSlideRevLimitSwitchTripped = Robot.arm.armSlide.getSensorCollection().isRevLimitSwitchClosed();
-  //int armAngleRevLimitSwitchTripped = Robot.arm.armAngleLead.getSensorCollection().isRevLimitSwitchClosed();
 
   /** Creates a new Arm. */
   public Arm() {
 
     armAngleFollow.follow(armAngleLead);
-    armSlide.setInverted(true);
 
-    armSlide.setNeutralMode(NeutralMode.Brake);
     armAngleLead.setNeutralMode(NeutralMode.Brake);
     armAngleFollow.setNeutralMode(NeutralMode.Brake);
 
@@ -44,37 +37,17 @@ public class Arm extends SubsystemBase {
 
     armAngleLead.setSensorPhase(false); //for positive + positive
   
-   armAngleLead.configNominalOutputForward(0,30);
-   armAngleLead.configNominalOutputReverse(0,30);
-   armAngleLead.configPeakOutputForward(0.25,30);
-   armAngleLead.configPeakOutputReverse(-0.25,30);
+    armAngleLead.configNominalOutputForward(0,30);
+    armAngleLead.configNominalOutputReverse(0,30);
+    armAngleLead.configPeakOutputForward(0.2,30); 
+    armAngleLead.configPeakOutputReverse(-0.2,30); 
 
     armAngleLead.configAllowableClosedloopError(0, 100, 30);
 
-   armAngleLead.config_kF(0, 0,30); // change to 0 and now the motors stop correctly
-   armAngleLead.config_kI(0, 0,30); 
-   armAngleLead.config_kP(0, .08,30); // tried bigger number and it worked // change to make speed bigger and not f
-   armAngleLead.config_kD(0, 0.8,30);
-
-//-------------------------------------------------------------------------------------------------------------------------------------\\
- 
-                 // Arm Slide \\
-
-  armSlide.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,30);
-
-  armSlide.setSensorPhase(false); //for positive + positive
-
-  armSlide.configNominalOutputForward(0,30);
-  armSlide.configNominalOutputReverse(0,30);
-  armSlide.configPeakOutputForward(0.6,30); // up
-  armSlide.configPeakOutputReverse(-0.3,30); // down
-
-  armSlide.configAllowableClosedloopError(0, 100, 30);
-
-  armSlide.config_kF(0, 0,30);
-  armSlide.config_kI(0, 0.1,30); 
-  armSlide.config_kP(0, 0.35,30); 
-  armSlide.config_kD(0, 0,30);
+    armAngleLead.config_kF(0, 0,30); // change to 0 and now the motors stop correctly
+    armAngleLead.config_kI(0, 0,30); 
+    armAngleLead.config_kP(0, .08,30); // tried bigger number and it worked // change to make speed bigger and not f
+    armAngleLead.config_kD(0, 0.8,30);
 
   }
 
@@ -99,13 +72,7 @@ public class Arm extends SubsystemBase {
   public void setArmEncoders(double Position){
     armAngleLead.setSelectedSensorPosition(Position);
     armAngleFollow.setSelectedSensorPosition(Position);
-    /*
-    //zero encoders with limit switches
-    if (armAngleRevLimitSwitchTripped == 1) {
-      armAngleLead.configClearPositionOnLimitR(true, 30);
-      armAngleFollow.configClearPositionOnLimitR(true, 30);
-    }
-    */
+  
   }
 
   public double getArmVelocity(){
@@ -123,38 +90,5 @@ public class Arm extends SubsystemBase {
   public void setArmVoltage(double voltage){
     armAngleLead.set(ControlMode.PercentOutput, voltage);
   }
-  //--------------------------------------------------------\\
-                  // SLIDE \\
-
-      // encoders \\
-  public void zeroArmSlideEncoders(){
-    armSlide.setSelectedSensorPosition(0);
-  }
-
-      // encoders \\
-  public void setSlideEncoders(double Position){
-    armSlide.setSelectedSensorPosition(Position);
-    /*
-    //zero encoders with limit switches
-    if (armSlideRevLimitSwitchTripped == 1) {
-      armSlide.configClearPositionOnLimitR(true, 30);
-    }
-    */
-  } 
-  
-  public double getArmSlideVelocity(){
-    return armSlide.getSelectedSensorVelocity();
-  }
-  
-  public void armSlideGoToPosition(double Position){
-    armSlide.set(TalonFXControlMode.Position, Position);
-  }
-  
-  public double getSlidePosition(){
-    return armSlide.getSelectedSensorPosition();
-  }
-  
-  public void setSlideVoltage(double voltage){
-    armSlide.set(ControlMode.PercentOutput, voltage);
-  }
+ 
 }

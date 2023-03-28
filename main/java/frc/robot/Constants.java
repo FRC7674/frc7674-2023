@@ -42,9 +42,10 @@ public final class Constants {
       public static final double kRamseteB = 2;
       public static final double kRamseteZeta = 0.7;
 
-      public static final double encoderTicksPerRev = 2048.0;
-      public static final double wheelRotPerMotorRot = 1.0/10.0;
-      public static final double wheelDiameter = 3.5; //inches
+//ENCODER CONSTANTS FOR DISTANCE
+      public static final double encoderTicksPerRev = 1.0;//2048.0;
+      public static final double wheelRotPerMotorRot = 0.2;
+      public static final double wheelDiameter = 6; //inches
       public static final double metersPerWheelRot = Units.inchesToMeters(wheelDiameter * Math.PI);
       public static final double metersPerEncoderTick = (1/encoderTicksPerRev) * wheelRotPerMotorRot * metersPerWheelRot;
 

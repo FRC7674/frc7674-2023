@@ -31,7 +31,6 @@ public class SetWristRotateVoltage extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     Robot.wrist.setWristRotateVoltage(0);
-
   }
 
   // Returns true when the command should end.

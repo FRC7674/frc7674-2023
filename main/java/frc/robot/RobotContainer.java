@@ -6,23 +6,29 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Arm.SetArmPosition;
-import frc.robot.commands.Arm.SetArmSlidePosition;
+import frc.robot.commands.Slide.SetArmSlidePosition;
 import frc.robot.commands.Arm.SetArmVoltage;
-import frc.robot.commands.Arm.SetSlideVoltage;
+import frc.robot.commands.Slide.SetSlideVoltage;
 import frc.robot.commands.Arm.setArmEncoderPos;
-import frc.robot.commands.Arm.setArmSlideEncoderPos;
+import frc.robot.commands.Slide.setArmSlideEncoderPos;
 import frc.robot.commands.Limelight.CameraControl;
 import frc.robot.commands.Presets.GroundLevel;
+import frc.robot.commands.Wrist.AutoToggleGripper;
 import frc.robot.commands.Wrist.GripperToggle;
 import frc.robot.commands.Wrist.RotateToSwitch;
 import frc.robot.commands.Wrist.SetWristAnglePosition;
 import frc.robot.commands.Wrist.SetWristRotatePosition;
 import frc.robot.commands.Wrist.SetWristRotateVoltage;
 import frc.robot.commands.Wrist.SetWristVoltage;
+import frc.robot.commands.command_groups.GoToTopShelf;
+import frc.robot.commands.command_groups.HighScore;
 import frc.robot.commands.drivetrain.DriveDistance;
+import frc.robot.commands.drivetrain.SetIsSlowMode;
 import frc.robot.subsystems.Wrist;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -76,12 +82,12 @@ public class RobotContainer {
 
                              // High Level \\
     m_operatorController.y().whileTrue(new SetArmPosition(56000)); 
-    m_operatorController.y().whileTrue(new SetWristAnglePosition(82)); 
+    m_operatorController.y().whileTrue(new SetWristAnglePosition(64)); 
     m_operatorController.y().whileTrue(new SetArmSlidePosition(58000)); 
 
-                            // Medium Level \\
-    m_operatorController.b().whileTrue(new SetArmPosition(57000)); 
-    m_operatorController.b().whileTrue(new SetWristAnglePosition(78)); 
+                            // Ground Angle Level \\
+    m_operatorController.b().whileTrue(new SetArmPosition(80000)); 
+    m_operatorController.b().whileTrue(new SetWristAnglePosition(23)); //46
     m_operatorController.b().whileTrue(new SetArmSlidePosition(0)); 
 
                              // Ground Level \\ 
@@ -90,12 +96,14 @@ public class RobotContainer {
      m_operatorController.a().whileTrue(new SetArmSlidePosition(0)); 
 
                             // Top Shelf \\ 
-    m_operatorController.povUp().whileTrue(new SetArmPosition(64000)); 
+   /*  m_operatorController.povUp().whileTrue(new SetArmPosition(64000)); 
     m_operatorController.povUp().whileTrue(new SetWristAnglePosition(93)); 
     m_operatorController.povUp().whileTrue(new SetArmSlidePosition(58000)); 
+*/
+    m_operatorController.povUp().whileTrue(new HighScore());
 
                              // Shelf Level \\ 
-    m_operatorController.povDown().whileTrue(new SetArmPosition(60000)); 
+    m_operatorController.povDown().whileTrue(new SetArmPosition(57000)); 
     m_operatorController.povDown().whileTrue(new SetWristAnglePosition(76)); 
     m_operatorController.povDown().whileTrue(new SetArmSlidePosition(0)); 
 
@@ -112,10 +120,9 @@ public class RobotContainer {
     m_driverController.b().onTrue(new CameraControl(0.73));
     m_driverController.a().onTrue(new CameraControl(0.59));
 
-
-    //m_driverController.leftTrigger().whileTrue(new SetArmSlidePosition(50000));
-   // m_driverController.rightTrigger().whileTrue(new SetArmPosition(50000));
-   // m_driverController.leftBumper().whileTrue(new SetWristAnglePosition(50));
+                             // Slow Mode \\
+    m_driverController.leftBumper().onTrue(new SetIsSlowMode(true));
+    m_driverController.leftBumper().onFalse(new SetIsSlowMode(false));
 
   }
 
@@ -131,37 +138,13 @@ public class RobotContainer {
                // Driver \\
   public Pair<Double, Double> getLeftStick() {
     double leftX = m_driverController.getLeftX();
-  // removed due to squaring twice
-    /*  if (leftX < 0) {
-      leftX = -(leftX * leftX);
-  } else {
-      leftX = leftX * leftX;
-  } */
-    double leftY = -1.0 * m_driverController.getLeftY();
-      // removed due to squaring twice
-  /*   if (leftY < 0) {
-      leftY = -(leftY * leftY);
-  } else {
-      leftY = leftY * leftY; 
-  } */
+    double leftY = -1.0 * m_driverController.getLeftY();   
     return new Pair<>(leftX, leftY); 
   }
 
   public Pair<Double, Double> getRightStick() {
     double rightX = m_driverController.getRightX();
-      // removed due to squaring twice
-  /*   if (rightX < 0) {
-      rightX = -(rightX * rightX);
-  } else {
-      rightX = rightX * rightX;
-  } */
-    double rightY = -1.0 * m_driverController.getRightY();
-      // removed due to squaring twice
-   /*  if (rightY < 0) {
-      rightY = -(rightY * rightY);
-  } else {
-      rightY = rightY * rightY;
-  } */
+    double rightY = -1.0 * m_driverController.getRightY();  
     return new Pair<>(rightX, rightY);
   }
   

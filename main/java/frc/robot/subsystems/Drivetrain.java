@@ -12,6 +12,7 @@ import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -66,6 +67,8 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDriveOdometry odometry;
   Rotation2d heading; //= new Rotation2d(Units.degreesToRadians(pigeon.getFusedHeading()));
 
+  public boolean IsSlowMode = false;
+
   private static final double rampRate = 0.25;
 
   DifferentialDrive differentialDrive = new DifferentialDrive(LeftDriveLead, RightDriveLead);
@@ -76,8 +79,9 @@ public class Drivetrain extends SubsystemBase {
 
     //setMotorConfigsToDefault();
     setMotorInversions();
-    setMotorNeutralModes();
+    setMotorNeutralModes(IdleMode.kBrake);
     setMotorRampRates();
+    setFollowers();
 
     //TODO reset encoders
     odometry = new DifferentialDriveOdometry(getHeading(), getLeftLeadDriveDistanceMeters(), getRightLeadDriveDistanceMeters());
@@ -98,13 +102,13 @@ public class Drivetrain extends SubsystemBase {
   public void drive(ControlMode controlMode, double left, double right) {
     //Left control mode is set to left
     this.LeftDriveLead.set(left);
-    this.LeftDriveFollow1.set(left);
-    this.LeftDriveFollow2.set(left);
+    //this.LeftDriveFollow1.set(left);
+    //this.LeftDriveFollow2.set(left);
 
     //Right control mode is set to right
     this.RightDriveLead.set(right);
-    this.RightDriveFollow1.set(right);
-    this.RightDriveFollow2.set(right);
+    //this.RightDriveFollow1.set(right);
+    //this.RightDriveFollow2.set(right);
   }
   
   public void drive(ControlMode controlMode, DriveSignal driveSignal) {
@@ -145,15 +149,15 @@ public class Drivetrain extends SubsystemBase {
   }
 
 //SETS TO BRAKE MODE, RUNS ONCE, THIRD STEP
-  public void setMotorNeutralModes() {
+  public void setMotorNeutralModes(IdleMode Mode) {
     
-    LeftDriveLead.setIdleMode(IdleMode.kBrake);
-    //LeftDriveFollow1.setIdleMode(IdleMode.kBrake);
-    //LeftDriveFollow2.setIdleMode(IdleMode.kBrake);
+    LeftDriveLead.setIdleMode(Mode);
+    LeftDriveFollow1.setIdleMode(Mode);
+    LeftDriveFollow2.setIdleMode(Mode);
 
-    RightDriveLead.setIdleMode(IdleMode.kBrake);
-    //RightDriveFollow1.setIdleMode(IdleMode.kBrake);
-    //RightDriveFollow2.setIdleMode(IdleMode.kBrake);
+    RightDriveLead.setIdleMode(Mode);
+    RightDriveFollow1.setIdleMode(Mode);
+    RightDriveFollow2.setIdleMode(Mode);
   }
 
 //SETS SPEED? RUNS ONCE, FOURTH STEP
@@ -273,6 +277,11 @@ public class Drivetrain extends SubsystemBase {
     setLeftDrivePosition(0);
     setRightDrivePosition(0);
   }
+
+  public void SetIsSlowMode(boolean IsSlow){
+    IsSlowMode = IsSlow;
+  }
+
 }
  
 

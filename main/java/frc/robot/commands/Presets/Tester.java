@@ -7,7 +7,7 @@ package frc.robot.commands.Presets;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.commands.Arm.SetArmPosition;
-import frc.robot.commands.Arm.SetArmSlidePosition;
+import frc.robot.commands.Slide.SetArmSlidePosition;
 import frc.robot.commands.Robot.WaitForTime;
 import frc.robot.commands.Wrist.SetWristAnglePosition;
 

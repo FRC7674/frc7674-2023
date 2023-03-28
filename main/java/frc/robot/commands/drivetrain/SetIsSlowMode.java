@@ -2,25 +2,24 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Limelight;
+package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-public class CameraControl extends CommandBase {
-
-  double d = 0.0;
-  /** Creates a new CameraControl.*/
-  public CameraControl(double d) {
+public class SetIsSlowMode extends CommandBase {
+  boolean IsSlow;
+  /** Creates a new SetIsSlowMode. */
+  public SetIsSlowMode(boolean IsSlow) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.d = d;
-    addRequirements(Robot.limelight);
+    addRequirements(Robot.drivetrain);
+    this.IsSlow = IsSlow;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Robot.limelight.setServo(d);
+    Robot.drivetrain.SetIsSlowMode(IsSlow);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,6 +33,6 @@ public class CameraControl extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

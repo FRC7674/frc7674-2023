@@ -20,15 +20,13 @@ public class SetWristAnglePosition extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-    Robot.wrist.setAnglePosition(Position);
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    Robot.wrist.setAnglePosition(Position);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

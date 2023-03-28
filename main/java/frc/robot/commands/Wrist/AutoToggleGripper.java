@@ -2,25 +2,23 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Limelight;
+package frc.robot.commands.Wrist;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-public class CameraControl extends CommandBase {
-
-  double d = 0.0;
-  /** Creates a new CameraControl.*/
-  public CameraControl(double d) {
+public class AutoToggleGripper extends CommandBase {
+  /** Creates a new AutoToggleGripper. */
+  public AutoToggleGripper() {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.d = d;
-    addRequirements(Robot.limelight);
+    addRequirements(Robot.pneumatics);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Robot.limelight.setServo(d);
+    Robot.pneumatics.toggleGripper1Solenoid();
+    Robot.pneumatics.toggleGripper2Solenoid();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,6 +32,6 @@ public class CameraControl extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

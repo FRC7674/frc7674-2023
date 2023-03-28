@@ -7,6 +7,7 @@ package frc.robot.commands.Presets;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Slide;
 
 public class GroundLevel extends CommandBase {
   /** Creates a new GroundLevel. */
@@ -24,9 +25,8 @@ public class GroundLevel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     Arm.armAnglePosition = 75000;
-    Arm.armSlidePosition = 2000;
+    Slide.armSlidePosition = 2000;
   
   }
 

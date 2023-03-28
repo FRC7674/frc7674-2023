@@ -40,7 +40,7 @@ public double wristAnglePosition;
 //Creates a new Wrist.
     public Wrist() {
 
-     // wristRotate.setInverted(true); // to make left joystick left spin
+      wristRotate.setInverted(true); // to make left joystick left spin
 
       rotatePidController.setFF(0.00008510);
       rotatePidController.setP(0.065);

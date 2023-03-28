@@ -15,7 +15,6 @@ public class GripperMove extends InstantCommand {
   public GripperMove() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
-
   public boolean m_updown;
   
   public GripperMove(boolean state){
@@ -23,8 +22,6 @@ public class GripperMove extends InstantCommand {
 
     m_updown = state;
   }
-
-
 
   // Called when the command is initially scheduled.
   @Override

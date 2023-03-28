@@ -7,7 +7,6 @@ package frc.robot;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.security.Key;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
@@ -36,6 +35,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.Slide;
 import frc.robot.subsystems.Wrist;
 
 /**
@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
   public static Pneumatics pneumatics = new Pneumatics(); 
   public static Limelight limelight = new Limelight();
   public static Arm arm = new Arm();
+  public static Slide slide = new Slide();
   public static Wrist wrist = new Wrist();
 
   private Command m_teleopCommand = new BobDrive();
@@ -71,7 +72,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     
     CameraServer.startAutomaticCapture(0);
-    
 
     m_robotContainer = new RobotContainer();
 
@@ -101,26 +101,22 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Pigeon Yaw", drivetrain.pigeon.getYaw());
     SmartDashboard.putNumber("Pigeon Pitch", drivetrain.pigeon.getPitch());
     SmartDashboard.putNumber("Pigeon Roll", drivetrain.pigeon.getRoll());
-
     SmartDashboard.putBoolean("Wrist Switch", wrist.getWristSwitchState());
-
     SmartDashboard.putNumber("Arm Position", arm.getArmPosition());
     SmartDashboard.putNumber("Arm Position 2", arm.getArmPosition());
-    SmartDashboard.putNumber("Slide Position", arm.getSlidePosition());
-    SmartDashboard.putNumber("Slide Position2", arm.getSlidePosition());
+    SmartDashboard.putNumber("Slide Position", slide.getSlidePosition());
+    SmartDashboard.putNumber("Slide Position2", slide.getSlidePosition());
     SmartDashboard.putNumber("Wrist Position", wrist.getWristPosition());
     SmartDashboard.putNumber("Wrist Rotate Position", wrist.getWristRotatePosition());
     SmartDashboard.putNumber("Left Drive Position", drivetrain.getLeftDrivePosition());
     SmartDashboard.putNumber("Right Drive Position", drivetrain.getRightDrivePosition());
-
     SmartDashboard.putNumber("Wrist Velocity", wrist.getWristRotateVelocity());
     SmartDashboard.putNumber("Wrist Angle Velocity", wrist.getWristAngleVelocity());
     SmartDashboard.putNumber("Arm Velocity", arm.getArmVelocity());
-    SmartDashboard.putNumber("Slide Velocity", arm.getArmSlideVelocity());
-    SmartDashboard.putNumber("Slide Velocity2", arm.getArmSlideVelocity());
-
+    SmartDashboard.putNumber("Slide Velocity", slide.getArmSlideVelocity());
+    SmartDashboard.putNumber("Slide Velocity2", slide.getArmSlideVelocity());
     SmartDashboard.putNumber("Arm Error", arm.armAngleLead.getClosedLoopError(0));
-    SmartDashboard.putNumber("Slide Error", arm.armSlide.getClosedLoopError(0));
+    SmartDashboard.putNumber("Slide Error", slide.armSlide.getClosedLoopError(0));
 
     CommandScheduler.getInstance().run();
   }
@@ -164,6 +160,7 @@ public class Robot extends TimedRobot {
 
     wrist.setDefaultCommand(new RotateWristWithJoystick());
     arm.setDefaultCommand(new MoveArmWithJoystick());
+    drivetrain.setDefaultCommand(new BobDrive());
 
   }
 
